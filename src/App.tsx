@@ -10,7 +10,8 @@ import { AppProvider, useApp } from './context/AppContext';
 const MainContent: React.FC = () => {
   const {
     currentUser, users, selectUser,
-    toggleTodo, updateTodo, deleteTodo
+    toggleTodo, updateTodo, deleteTodo,
+    todos, categories                // <--- добавь это!
   } = useApp();
   const [showUserModal, setShowUserModal] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
@@ -41,6 +42,8 @@ const MainContent: React.FC = () => {
           <div className="lg:col-span-2">
             <AddTodo />
             <TodoList
+              todos={todos}                // <--- добавь это!
+              categories={categories}      // <--- и это!
               currentUser={currentUser}
               onToggle={toggleTodo}
               onUpdate={updateTodo}

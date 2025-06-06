@@ -53,17 +53,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     if (userId) url += `?user_id=${userId}`;
     const res = await fetch(url);
     const data = await res.json();
-    setTodos(Array.isArray(data) ?
-      data.map((t: any) => ({
-        id: t.id,
-        text: t.text,
-        completed: t.completed,
-        categoryId: t.category_id,
-        createdAt: t.created_at, // если есть
-        userId: t.user_id,
-      }))
-      : []
-    );
+    console.log('todos from server:', data); // смотри в консоль что реально приходит
+    const mapped = Array.isArray(data)
+      ? data.map((t: any) => ({
+          id: t.id,
+          text: t.text,
+          completed: t.completed,
+          categoryId: t.category_id, // маппинг!
+          createdAt: t.created_at ? new Date(t.created_at).getTime() : Date.now(),
+          userId: t.user_id, // маппинг!
+        }))
+      : [];
+    setTodos(mapped);
+    console.log('todos after mapping:', mapped); // смотри что реально уходит в стейт
   };
 
   // Получение данных при монтировании
@@ -144,14 +146,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     });
     await fetchUsers();
   };
+
   const updateCategory = async (id: string, name: string, color: string) => {
-  await fetch(`http://localhost:5000/categories/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, color }),
-  });
-  await fetchCategories();
-};
+    await fetch(`http://localhost:5000/categories/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, color }),
+    });
+    await fetchCategories();
+  };
+
   const selectUser = (id: string) => {
     const user = users.find(u => u.id === id) || null;
     setCurrentUser(user);

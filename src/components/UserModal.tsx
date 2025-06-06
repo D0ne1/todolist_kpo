@@ -73,7 +73,7 @@ const UserModal: React.FC<UserModalProps> = ({
               dark:hover:bg-indigo-900/40 transition-colors duration-200"
           >
             <UserPlus size={16} className="mr-2" />
-            Зарегистрироваться заново
+            Зарегистрироваться
           </button>
         </div>
       </div>
